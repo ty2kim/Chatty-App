@@ -9,19 +9,33 @@ class App extends Component {
       currentUser: { name: 'Bob' },
       messages: [
         {
-          //id: 1,
+          id: 1,
           username: 'Bob',
           content: 'Has anyone seen my marbles?',
         },
         {
-          //id: 2,
+          id: 2,
           username: 'Anonymous',
           content: 'No, I think you lost them. You lost your marbles Bob. You lost them for good.',
         },
       ],
     };
     super(props);
-    this.state = { data: data };
+    this.state = data;
+  }
+
+  componentDidMount() {
+    console.log("componentDidMount <App />");
+    setTimeout(() => {
+      console.log("Simulating incoming message");
+      // Add a new message to the list of messages in the data store
+      const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
+      const messages = this.state.messages.concat(newMessage)
+      // Update the state of the app component.
+      // Calling setState will trigger a call to render() in App and all child components.
+      // Get current state, and find 'messages' and update
+      this.setState({messages: messages})
+    }, 3000);
   }
 
   render() {
@@ -30,8 +44,8 @@ class App extends Component {
         <nav>
           <h1>Chatty</h1>
         </nav>
-        <MessageList messages={this.state.data.messages}/>
-        <ChatBar currentUser={this.state.data.currentUser.name}/>
+        <MessageList messages={this.state.messages}/>
+        <ChatBar currentUser={this.state.currentUser.name}/>
       </div>
     );
   }
