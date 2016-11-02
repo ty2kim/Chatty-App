@@ -4,7 +4,8 @@ import ChatBar from './ChatBar.jsx';
 
 class App extends Component {
   constructor(props) {
-    var data = {
+    super(props);
+    this.state = {
       // optional. if currentUser is not defined, it means the user is Anonymous
       currentUser: { name: '' },
       messages: [
@@ -20,9 +21,6 @@ class App extends Component {
         // },
       ],
     };
-    super(props);
-    // it's ok to do this in constructors
-    this.state = data;
   }
 
   // functions that comes with react, don't use ES6
