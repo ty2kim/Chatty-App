@@ -25,8 +25,6 @@ class App extends Component {
     this.state = data;
   }
 
-
-
   // functions that comes with react, don't use ES6
   // no need to bind as well because it's all done by react
   // when we do 'extends Component'
