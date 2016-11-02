@@ -8,16 +8,16 @@ class App extends Component {
       // optional. if currentUser is not defined, it means the user is Anonymous
       currentUser: { name: 'Bob' },
       messages: [
-        {
-          //id: 1,
-          username: 'Bob',
-          content: 'Has anyone seen my marbles?',
-        },
-        {
-          //id: 2,
-          username: 'Anonymous',
-          content: 'No, I think you lost them. You lost your marbles Bob. You lost them for good.',
-        },
+        // {
+        //   //id: 1,
+        //   username: 'Bob',
+        //   content: 'Has anyone seen my marbles?',
+        // },
+        // {
+        //   //id: 2,
+        //   username: 'Anonymous',
+        //   content: 'No, I think you lost them. You lost your marbles Bob. You lost them for good.',
+        // },
       ],
     };
     super(props);
@@ -33,9 +33,11 @@ class App extends Component {
     this.socket.onopen = (event) => {
       console.log('Connected to server');
     }
-    // this.socket.onmessage = (event) => {
-    //   console.log(event);
-    // }
+    this.socket.onmessage = (event) => {
+      const newMessage = JSON.parse(event.data);
+      const updatedMessages = this.state.messages.concat(newMessage);
+      this.setState({messages: updatedMessages});
+    }
   }
 
   addMessage = (newIncomingMessage) => {
@@ -45,7 +47,7 @@ class App extends Component {
     // const updatedMessages = this.state.messages.concat(newMessage);
     // this.setState({messages: updatedMessages});
     const message = {
-      type: 'message',
+      id: '',
       username: this.state.currentUser.name,
       content: newIncomingMessage
     };

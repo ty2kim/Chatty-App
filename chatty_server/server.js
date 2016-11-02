@@ -1,6 +1,6 @@
-
 const express = require('express');
 const SocketServer = require('ws').Server;
+const uuid = require('node-uuid');
 
 // Set the port to 5000
 const PORT = 5000;
@@ -15,6 +15,12 @@ const server = express()
 // note that { server } is ES6 notation which is equivalent to { server: server}
 const wss = new SocketServer({ server });
 
+wss.broadcast = (data) => {
+  wss.clients.forEach((client) => {
+    client.send(data);
+  });
+};
+
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
@@ -27,5 +33,7 @@ wss.on('connection', (ws) => {
   ws.on('message', (message) => {
     const newMessage = JSON.parse(message);
     console.log(`User ${newMessage.username} said ${newMessage.content}`);
+    newMessage.id = uuid.v4();
+    wss.broadcast(JSON.stringify(newMessage));
   });
 });
