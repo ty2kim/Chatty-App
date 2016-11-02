@@ -6,7 +6,7 @@ class App extends Component {
   constructor(props) {
     var data = {
       // optional. if currentUser is not defined, it means the user is Anonymous
-      currentUser: { name: 'Bob' },
+      currentUser: { name: '' },
       messages: [
         // {
         //   //id: 1,
@@ -54,6 +54,15 @@ class App extends Component {
     this.socket.send(JSON.stringify(message));
   }
 
+  changeName = (newName) => {
+    //const oldName = this.state.currentUser.name;
+    //console.log(oldName);
+    console.log(newName);
+    console.log(this.state.currentUser.name);
+    this.setState({currentUser: {name: newName}});
+    console.log(this.state.currentUser.name);
+  }
+
   render() {
     return (
       <div className='wrapper'>
@@ -64,6 +73,7 @@ class App extends Component {
         <ChatBar
           currentUser={this.state.currentUser}
           addMessage={this.addMessage}
+          changeName={this.changeName}
         />
       </div>
     );

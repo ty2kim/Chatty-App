@@ -8,11 +8,11 @@ class ChatBar extends Component {
     // using 'bind' way
     //this.handleChange = this.handleChange.bind(this);
     //this.submitMessage = this.submitMessage.bind(this);
-    this.state = {message: '', username: this.props.currentUser.name};
+    this.state = {username: this.props.currentUser.name, message: ''};
   }
 
   // need to use ES6 if you don't want to use bind
-  handleChange = (e) => {
+  handleChangeMessage = (e) => {
     this.setState({message: e.target.value});
   }
 
@@ -28,17 +28,19 @@ class ChatBar extends Component {
     }
   }
 
-  // handleChangeName(e) {
-  //   this.state.username = e.target.value;
-  //   this.setState(this.state);
-  // }
-  //
-  // changeName(e) {
-  //   if (e.key === 'Enter') {
-  //     this.props.changeName(e.target.value);
-  //     this.setState(this.state);
-  //   }
-  // }
+  handleChangeName = (e) => {
+    //this.state.username = e.target.value;
+    //this.setState(this.state);
+    this.setState({username: e.target.value});
+  }
+
+  updateName = (e) => {
+    if (e.key === 'Enter') {
+      this.props.changeName(e.target.value);
+      const newName = this.state.username;
+      this.setState({username: newName});
+    }
+  }
 
   render() {
     return (
@@ -47,9 +49,9 @@ class ChatBar extends Component {
           id="username"
           type="text"
           placeholder="Your Name (Optional)"
-          value={this.props.currentUser.name}
-          //onChange={this.handleChangeName}
-          //onKeyUp={this.changeName}
+          value={this.state.username}
+          onChange={this.handleChangeName}
+          onKeyUp={this.updateName}
         />
         <input
           id="new-message"
@@ -60,7 +62,7 @@ class ChatBar extends Component {
           //to not use callbacks which is bad,
           //need to use bind(equally bad) or es6(better) when defining functions
           //if you use es6, no need for bind or callbacks!
-          onChange={this.handleChange}
+          onChange={this.handleChangeMessage}
           onKeyUp={this.submitMessage}
         />
       </footer>
