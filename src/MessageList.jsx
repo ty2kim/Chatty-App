@@ -5,11 +5,11 @@ class MessageList extends Component {
   render() {
     return (
       <div id="message-list">
-        {/* {this.props.messages.map((message) => {
-          return <Message message={message} key={message.id}/>
-        })} */}
-        {this.props.messages.map((message, index) => {
+        {/* {this.props.messages.map((message, index) => {
           return <Message message={message} key={index}/>
+        })} */}
+        {this.props.messages.map((message) => {
+          return <Message message={message} key={message.id}/>
         })}
         <div className="message system">
           Anonymous1 changed their name to nomnom.

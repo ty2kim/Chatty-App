@@ -57,10 +57,7 @@ class App extends Component {
   changeName = (newName) => {
     //const oldName = this.state.currentUser.name;
     //console.log(oldName);
-    console.log(newName);
-    console.log(this.state.currentUser.name);
     this.setState({currentUser: {name: newName}});
-    console.log(this.state.currentUser.name);
   }
 
   render() {
