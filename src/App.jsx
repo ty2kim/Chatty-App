@@ -29,23 +29,27 @@ class App extends Component {
   // no need to bind as well because it's all done by react
   // when we do 'extends Component'
   componentDidMount() {
-    // setTimeout(() => {
-    //   console.log("Simulating incoming message");
-    //   //Add a new message to the list of messages in the data store
-    //   const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
-    //   const messages = this.state.messages.concat(newMessage)
-    //   //Update the state of the app component.
-    //   //Calling setState will trigger a call to render() in App and all child components.
-    //   this.setState({messages: messages})
-    // }, 3000);
+    this.socket = new WebSocket('ws://localhost:5000/socketserver');
+    this.socket.onopen = (event) => {
+      console.log('Connected to server');
+    }
+    // this.socket.onmessage = (event) => {
+    //   console.log(event);
+    // }
   }
 
   addMessage = (newIncomingMessage) => {
-    const newMessage = {username: this.state.currentUser.name, content: newIncomingMessage};
-    // why use concat
-    // does not change the current state until 'setState' is called
-    const updatedMessages = this.state.messages.concat(newMessage);
-    this.setState({messages: updatedMessages});
+    // const newMessage = {username: this.state.currentUser.name, content: newIncomingMessage};
+    // // why use concat
+    // // does not change the current state until 'setState' is called
+    // const updatedMessages = this.state.messages.concat(newMessage);
+    // this.setState({messages: updatedMessages});
+    const message = {
+      type: 'message',
+      username: this.state.currentUser.name,
+      content: newIncomingMessage
+    };
+    this.socket.send(JSON.stringify(message));
   }
 
   render() {

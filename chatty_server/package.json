@@ -1,0 +1,17 @@
+{
+  "name": "chatty_server",
+  "version": "1.0.0",
+  "description": "WebSockets Server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bufferutil": "^1.2.1",
+    "express": "4.14.0",
+    "utf-8-validate": "^1.2.1",
+    "ws": "1.1.1"
+  }
+}
