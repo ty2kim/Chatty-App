@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 // you don't need any functions that inherited from Component, (e.g. componentDidMount)
 // you don't need to keep any state
 
-let Chatbar = props =>
+let ChatBar = props =>
   <footer>
     <input
       id="username"
@@ -27,5 +27,5 @@ let Chatbar = props =>
         }
       }}
     />
-  </footer> 
+  </footer>
 export default ChatBar;
