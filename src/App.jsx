@@ -22,7 +22,6 @@ class App extends Component {
     }
     this.socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      console.log(data);
       switch (data.type) {
         case 'incomingMessage':
           const updatedMessages = this.state.messages.concat(data);
@@ -48,6 +47,7 @@ class App extends Component {
       username: this.state.currentUser.name,
       content: newMessageContent
     };
+    console.log(`(client -> server) : ${JSON.stringify(postMessage)}`);
     this.socket.send(JSON.stringify(postMessage));
   }
 
@@ -58,6 +58,7 @@ class App extends Component {
       type: 'postNotification',
       content: `${prevName} changed their name to ${newName}`
     }
+    console.log(`(client -> server) : ${JSON.stringify(postNotification)}`);
     this.socket.send(JSON.stringify(postNotification));
   }
 
