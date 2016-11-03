@@ -21,14 +21,17 @@ class App extends Component {
       console.log('Connected to server');
     }
     this.socket.onmessage = (event) => {
+      console.log(`(server -> client) : ${event.data}`)
       const data = JSON.parse(event.data);
+      let updatedMessages;
       switch (data.type) {
         case 'incomingMessage':
-          const updatedMessages = this.state.messages.concat(data);
+          updatedMessages = this.state.messages.concat(data);
           this.setState({messages: updatedMessages});
           break;
         case 'incomingNotification':
-
+          updatedMessages = this.state.messages.concat(data);
+          this.setState({messages: updatedMessages});
           break;
         default:
           throw new Error('Unknown event type ' + data.type);
@@ -42,24 +45,39 @@ class App extends Component {
     // // does not change the current state until 'setState' is called
     // const updatedMessages = this.state.messages.concat(newMessage);
     // this.setState({messages: updatedMessages});
-    const postMessage = {
-      type: 'postMessage',
-      username: this.state.currentUser.name,
-      content: newMessageContent
-    };
-    console.log(`(client -> server) : ${JSON.stringify(postMessage)}`);
-    this.socket.send(JSON.stringify(postMessage));
+    if (newMessageContent) {
+      const postMessage = {
+        type: 'postMessage',
+        username: this.state.currentUser.name || 'Anonymous',
+        content: newMessageContent
+      };
+      console.log(`(client -> server) : ${JSON.stringify(postMessage)}`);
+      this.socket.send(JSON.stringify(postMessage));
+    }
   }
 
   changeName = (newName) => {
+    // const prevName = this.state.currentUser.name || 'Anonymous';
+    // this.setState({currentUser: {name: newName}});
+    // const postNotification = {
+    //   type: 'postNotification',
+    //   content: `${prevName} changed their name to ${newName}`
+    // }
+    // console.log(`(client -> server) : ${JSON.stringify(postNotification)}`);
+    // this.socket.send(JSON.stringify(postNotification));
+
+    const newNameTrim = newName.replace(/^\s+|\s+$/g,'') || 'Anonymous';
     const prevName = this.state.currentUser.name || 'Anonymous';
-    this.setState({currentUser: {name: newName}});
-    const postNotification = {
-      type: 'postNotification',
-      content: `${prevName} changed their name to ${newName}`
+    if (prevName != newNameTrim) {
+      this.setState({currentUser: {name: newName}});
+      const postNotification = {
+        type: 'postNotification',
+        content: `${prevName} changed their name to ${newNameTrim}`
+      }
+      console.log(`(client -> server) : ${JSON.stringify(postNotification)}`);
+      this.socket.send(JSON.stringify(postNotification));
     }
-    console.log(`(client -> server) : ${JSON.stringify(postNotification)}`);
-    this.socket.send(JSON.stringify(postNotification));
+
   }
 
   render() {
