@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 // use class when 1. want to 'extent Component' 2. want to keep state
 // you don't need any functions that inherited from Component, (e.g. componentDidMount)
-// you don't need to keep any state
+// you don't need to keep any state, only using props from apps
 let ChatBar = props => {
   return (
     <footer>
