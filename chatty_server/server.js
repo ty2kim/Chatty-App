@@ -21,12 +21,24 @@ wss.broadcast = (data) => {
   });
 };
 
+const colors = ['red', 'blue', 'green', 'purple'];
+function getRandomIntInclusive(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
 // ws is the traintrack. the 'socket'
 wss.on('connection', (ws) => {
   console.log('Client connected');
+  // assign color
+  const randomColor = colors[getRandomIntInclusive(0, colors.length - 1)];
+  const colorAssigned = {
+    type: 'colorAssigned',
+    color: randomColor
+  }
+  ws.send(JSON.stringify(colorAssigned));
+  // broadcast usercounts
   const incomingUserCount = {
     type: 'incomingUserCount',
     count: wss.clients.length
@@ -38,6 +50,7 @@ wss.on('connection', (ws) => {
     incomingUserCount.count = wss.clients.length;
     wss.broadcast(JSON.stringify(incomingUserCount));
   });
+  // handle messages
   ws.on('message', (data) => {
     data = JSON.parse(data);
     switch (data.type) {

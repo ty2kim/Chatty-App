@@ -37,6 +37,10 @@ class App extends Component {
         case 'incomingUserCount':
           this.setState({userCount: data.count});
           break;
+        case 'colorAssigned':
+          const color = data.color;
+          document.getElementsByClassName('message').style.color = color;
+          break;
         default:
           throw new Error('Unknown event type ' + data.type);
       }
