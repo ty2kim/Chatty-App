@@ -8,18 +8,7 @@ class App extends Component {
     this.state = {
       // optional. if currentUser is not defined, it means the user is Anonymous
       currentUser: { name: '' },
-      messages: [
-        // {
-        //   //id: 1,
-        //   username: 'Bob',
-        //   content: 'Has anyone seen my marbles?',
-        // },
-        // {
-        //   //id: 2,
-        //   username: 'Anonymous',
-        //   content: 'No, I think you lost them. You lost your marbles Bob. You lost them for good.',
-        // },
-      ],
+      messages: []
     };
   }
 
@@ -32,30 +21,44 @@ class App extends Component {
       console.log('Connected to server');
     }
     this.socket.onmessage = (event) => {
-      const newMessage = JSON.parse(event.data);
-      const updatedMessages = this.state.messages.concat(newMessage);
-      this.setState({messages: updatedMessages});
+      const data = JSON.parse(event.data);
+      console.log(data);
+      switch (data.type) {
+        case 'incomingMessage':
+          const updatedMessages = this.state.messages.concat(data);
+          this.setState({messages: updatedMessages});
+          break;
+        case 'incomingNotification':
+
+          break;
+        default:
+          throw new Error('Unknown event type ' + data.type);
+      }
     }
   }
 
-  addMessage = (newIncomingMessage) => {
+  addMessage = (newMessageContent) => {
     // const newMessage = {username: this.state.currentUser.name, content: newIncomingMessage};
     // // why use concat
     // // does not change the current state until 'setState' is called
     // const updatedMessages = this.state.messages.concat(newMessage);
     // this.setState({messages: updatedMessages});
-    const message = {
-      id: '',
+    const postMessage = {
+      type: 'postMessage',
       username: this.state.currentUser.name,
-      content: newIncomingMessage
+      content: newMessageContent
     };
-    this.socket.send(JSON.stringify(message));
+    this.socket.send(JSON.stringify(postMessage));
   }
 
   changeName = (newName) => {
-    //const oldName = this.state.currentUser.name;
-    //console.log(oldName);
+    const prevName = this.state.currentUser.name || 'Anonymous';
     this.setState({currentUser: {name: newName}});
+    const postNotification = {
+      type: 'postNotification',
+      content: `${prevName} changed their name to ${newName}`
+    }
+    this.socket.send(JSON.stringify(postNotification));
   }
 
   render() {
