@@ -27,9 +27,17 @@ wss.broadcast = (data) => {
 // ws is the traintrack. the 'socket'
 wss.on('connection', (ws) => {
   console.log('Client connected');
-
+  const incomingUserCount = {
+    type: 'incomingUserCount',
+    count: wss.clients.length
+  }
+  wss.broadcast(JSON.stringify(incomingUserCount));
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
-  ws.on('close', () => console.log('Client disconnected'));
+  ws.on('close', () => {
+    console.log('Client disconnected');
+    incomingUserCount.count = wss.clients.length;
+    wss.broadcast(JSON.stringify(incomingUserCount));
+  });
   ws.on('message', (data) => {
     data = JSON.parse(data);
     switch (data.type) {

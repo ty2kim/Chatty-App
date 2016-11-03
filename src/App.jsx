@@ -8,7 +8,8 @@ class App extends Component {
     this.state = {
       // optional. if currentUser is not defined, it means the user is Anonymous
       currentUser: { name: '' },
-      messages: []
+      messages: [],
+      userCount: 0
     };
   }
 
@@ -32,6 +33,9 @@ class App extends Component {
         case 'incomingNotification':
           updatedMessages = this.state.messages.concat(data);
           this.setState({messages: updatedMessages});
+          break;
+        case 'incomingUserCount':
+          this.setState({userCount: data.count});
           break;
         default:
           throw new Error('Unknown event type ' + data.type);
@@ -85,6 +89,7 @@ class App extends Component {
       <div className='wrapper'>
         <nav>
           <h1>Chatty</h1>
+          <span id="user-counter">{this.state.userCount} users Online</span>
         </nav>
         <MessageList messages={this.state.messages}/>
         <ChatBar
