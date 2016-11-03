@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 let Message = props => {
   return (
     <div className="message">
-      <span className="username">{props.message.username}</span>
+      <span className="username" style={{color: props.message.color}}>{props.message.username}</span>
       <span className="content">{props.message.content}</span>
     </div>
   );

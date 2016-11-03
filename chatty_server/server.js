@@ -21,7 +21,7 @@ wss.broadcast = (data) => {
   });
 };
 
-const colors = ['red', 'blue', 'green', 'purple'];
+const colors = ['red', 'blue', 'green', 'purple', 'black', 'grey', 'orange'];
 function getRandomIntInclusive(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }

@@ -9,7 +9,8 @@ class App extends Component {
       // optional. if currentUser is not defined, it means the user is Anonymous
       currentUser: { name: '' },
       messages: [],
-      userCount: 0
+      userCount: 0,
+      color: ''
     };
   }
 
@@ -38,8 +39,7 @@ class App extends Component {
           this.setState({userCount: data.count});
           break;
         case 'colorAssigned':
-          const color = data.color;
-          document.getElementsByClassName('message').style.color = color;
+          this.setState({color: data.color})
           break;
         default:
           throw new Error('Unknown event type ' + data.type);
@@ -57,7 +57,8 @@ class App extends Component {
       const postMessage = {
         type: 'postMessage',
         username: this.state.currentUser.name || 'Anonymous',
-        content: newMessageContent
+        content: newMessageContent,
+        color: this.state.color
       };
       console.log(`(client -> server) : ${JSON.stringify(postMessage)}`);
       this.socket.send(JSON.stringify(postMessage));
@@ -95,7 +96,10 @@ class App extends Component {
           <h1>Chatty</h1>
           <span id="user-counter">{this.state.userCount} users Online</span>
         </nav>
-        <MessageList messages={this.state.messages}/>
+        <MessageList
+          messages={this.state.messages}
+          color={this.state.color}
+        />
         <ChatBar
           currentUser={this.state.currentUser}
           addMessage={this.addMessage}
