@@ -62,7 +62,6 @@ wss.on('connection', (ws) => {
         data.type = 'incomingNotification';
         break;
       case 'postImage':
-        console.log('server: postImage');
         data.type = 'incomingImage';
         break;
       default:
