@@ -23,7 +23,7 @@ let ChatBar = props => {
         placeholder="Type a message and hit ENTER"
         onKeyUp={e => {
           if (e.key === 'Enter' && e.target.value) {
-            const regex = /^.*(.jpg|.png|.gif)$/;
+            const regex = /^(https|www.).+(.jpg|.png|.gif)$/;
             const input = e.target.value;
             input.match(regex) ? props.addImage(input) : props.addMessage(input);
             e.target.value = '';

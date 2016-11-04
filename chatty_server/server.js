@@ -56,7 +56,6 @@ wss.on('connection', (ws) => {
     switch (data.type) {
       case 'postMessage':
         data.type = 'incomingMessage';
-        data.id = uuid.v4();
         break;
       case 'postNotification':
         data.type = 'incomingNotification';
@@ -67,6 +66,7 @@ wss.on('connection', (ws) => {
       default:
         throw new Error('Unknown message type ' + data.type);
     }
+    data.id = uuid.v4();
     wss.broadcast(JSON.stringify(data));
   });
 });

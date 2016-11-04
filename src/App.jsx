@@ -65,13 +65,15 @@ class App extends Component {
   }
 
   addImage = (newImageUrl) => {
-    // const postImage = {
-    //   type: 'postImage',
-    //   username: this.state.currentUser.name,
-    //   url: newImageUrl
-    // }
-    // console.log(`(client -> server) : ${JSON.stringify(postImage)}`);
-    // this.socket.send(JSON.stringify(postImage));
+    const postImage = {
+      type: 'postImage',
+      username: this.state.currentUser.name,
+      url: newImageUrl,
+      size: '60%',
+      color: this.state.color
+    }
+    console.log(`(client -> server) : ${JSON.stringify(postImage)}`);
+    this.socket.send(JSON.stringify(postImage));
   }
 
   changeName = (newName) => {
