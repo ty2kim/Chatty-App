@@ -75,6 +75,7 @@ let ChatBar = props => {
 //   }
 //
 //   render() {
+//     console.log('rendering');
 //     return (
 //       <footer>
 //         <input
