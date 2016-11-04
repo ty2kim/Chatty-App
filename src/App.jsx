@@ -54,6 +54,9 @@ class App extends Component {
   }
 
   addMessage = (newMessageContent) => {
+    const regex = /^(http).+(.jpg|.png|.gif)$/;
+    const input = e.target.value;
+
     const postMessage = {
       type: 'postMessage',
       username: this.state.currentUser.name,
