@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 let Message = props => {
-  console.log(`message: ${props.message.imageURL}`);
   if (!props.message.imageURL) {
     return (
       <div className="message">

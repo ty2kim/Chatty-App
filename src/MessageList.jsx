@@ -3,15 +3,6 @@ import Message from './Message.jsx';
 
 let MessageList = props => {
     return (
-      // <div id="message-list">
-      //   {props.messages.map((message) => {
-      //     return <Message message={message} key={message.id}/>
-      //   })}
-      //   <div className="message system">
-      //     Anonymous1 changed their name to nomnom.
-      //   </div>
-      // </div>
-
       <div id="message-list">
         {props.messages.map((message, index) => {
           if (message.type === 'incomingMessage') {
