@@ -14,7 +14,16 @@ let MessageList = props => {
 
       <div id="message-list">
         {props.messages.map((message, index) => {
-          return <Message message={message} key={message.id}/>
+          if (message.type === 'incomingMessage') {
+            return <Message message={message} key={message.id}/>
+          }
+          else if (message.type === 'incomingNotification') {
+            return (
+              <div className="message system" key={index}>
+                {message.notification}
+              </div>
+            );
+          }
         })}
       </div>
     );

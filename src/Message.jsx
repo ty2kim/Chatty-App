@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
 let Message = props => {
-  console.log(`message: ${props.message.type}`);
-  if (props.message.type === 'incomingMessage') {
+  console.log(`message: ${props.message.imageURL}`);
+  if (!props.message.imageURL) {
     return (
       <div className="message">
         <span className="username" style={{color: props.message.color}}>{props.message.username}</span>
@@ -10,23 +10,14 @@ let Message = props => {
       </div>
     );
   }
-  else if (props.message.type === 'incomingNotification') {
-    return (
-      <div className="message system">
-        {props.message.notification}
-      </div>
-    );
-  }
-  else if (props.message.type === 'incomingImage') {
-    return (
-      <div className="image">
-        <span className="username" style={{color: props.message.color}}>{props.message.username}</span>
-        <img src={props.message.url} alt={props.message.type} style={{width: props.message.size}}/>
-      </div>
-    );
-  }
   else {
-    return null;
+    return (
+      <div className="message">
+        <span className="username" style={{color: props.message.color}}>{props.message.username}</span>
+        <span className="content">{props.message.content}</span>
+        <img className="image" src={props.message.imageURL} style={props.message.style}/>
+      </div>
+    );
   }
 }
 // class Message extends Component {

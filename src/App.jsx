@@ -28,11 +28,6 @@ class App extends Component {
       let updatedMessages;
       switch (data.type) {
         case 'incomingMessage':
-          // why use concat
-          // does not change the current state until 'setState' is called
-          updatedMessages = this.state.messages.concat(data);
-          this.setState({messages: updatedMessages});
-          break;
         case 'incomingNotification':
           updatedMessages = this.state.messages.concat(data);
           this.setState({messages: updatedMessages});
@@ -43,10 +38,6 @@ class App extends Component {
         case 'colorAssigned':
           this.setState({color: data.color})
           break;
-        case 'incomingImage':
-          updatedMessages = this.state.messages.concat(data);
-          this.setState({messages: updatedMessages});
-          break;
         default:
           throw new Error('Unknown event type ' + data.type);
       }
@@ -54,29 +45,26 @@ class App extends Component {
   }
 
   addMessage = (newMessageContent) => {
-    const regex = /^(http).+(.jpg|.png|.gif)$/;
-    const input = e.target.value;
-
+    const dataTrim = newMessageContent.replace(/^\s+|\s+$/g,'');
+    const regex = /(http).+(.jpg|.png|.gif)$/;
     const postMessage = {
       type: 'postMessage',
       username: this.state.currentUser.name,
-      content: newMessageContent,
-      color: this.state.color
-    };
-    console.log(`(client -> server) : ${JSON.stringify(postMessage)}`);
-    this.socket.send(JSON.stringify(postMessage));
-  }
-
-  addImage = (newImageUrl) => {
-    const postImage = {
-      type: 'postImage',
-      username: this.state.currentUser.name,
-      url: newImageUrl,
-      size: '60%',
+      content: dataTrim,
       color: this.state.color
     }
-    console.log(`(client -> server) : ${JSON.stringify(postImage)}`);
-    this.socket.send(JSON.stringify(postImage));
+    if (dataTrim.match(regex)) {
+      const url = dataTrim.match(regex)[0];
+      const contentTrim = dataTrim.replace(regex, '').replace(/^\s+|\s+$/g,'');
+      postMessage.content = contentTrim;
+      postMessage.imageURL = url;
+      postMessage.style = {
+        width: '60%',
+        height: '60%'
+      }
+    }
+    console.log(`(client -> server) : ${JSON.stringify(postMessage)}`);
+    this.socket.send(JSON.stringify(postMessage));
   }
 
   changeName = (newName) => {
@@ -108,7 +96,6 @@ class App extends Component {
         <ChatBar
           currentUser={this.state.currentUser}
           addMessage={this.addMessage}
-          addImage={this.addImage}
           changeName={this.changeName}
         />
       </div>

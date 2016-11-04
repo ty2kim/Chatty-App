@@ -23,7 +23,7 @@ let ChatBar = props => {
         placeholder="Type a message and hit ENTER"
         onKeyUp={e => {
           if (e.key === 'Enter' && e.target.value) {
-            props.addMessage(input);
+            props.addMessage(e.target.value);
             e.target.value = '';
           }
         }}
