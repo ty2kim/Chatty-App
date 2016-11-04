@@ -61,6 +61,10 @@ wss.on('connection', (ws) => {
       case 'postNotification':
         data.type = 'incomingNotification';
         break;
+      case 'postImage':
+        console.log('server: postImage');
+        data.type = 'incomingImage';
+        break;
       default:
         throw new Error('Unknown message type ' + data.type);
     }

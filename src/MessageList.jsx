@@ -20,7 +20,7 @@ let MessageList = props => {
           else if (message.type === 'incomingNotification') {
             return (
               <div className="message system" key={index}>
-                {message.content}
+                {message.notification}
               </div>
             );
           }

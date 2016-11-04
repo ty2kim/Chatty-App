@@ -7,7 +7,7 @@ class App extends Component {
     super(props);
     this.state = {
       // optional. if currentUser is not defined, it means the user is Anonymous
-      currentUser: { name: '' },
+      currentUser: { name: 'Anonymous' },
       messages: [],
       userCount: 0,
       color: ''
@@ -28,6 +28,8 @@ class App extends Component {
       let updatedMessages;
       switch (data.type) {
         case 'incomingMessage':
+          // why use concat
+          // does not change the current state until 'setState' is called
           updatedMessages = this.state.messages.concat(data);
           this.setState({messages: updatedMessages});
           break;
@@ -41,6 +43,10 @@ class App extends Component {
         case 'colorAssigned':
           this.setState({color: data.color})
           break;
+        case 'incomingImage':
+          updatedMessages = this.state.messages.concat(data);
+          this.setState({messages: updatedMessages});
+          break;
         default:
           throw new Error('Unknown event type ' + data.type);
       }
@@ -48,40 +54,34 @@ class App extends Component {
   }
 
   addMessage = (newMessageContent) => {
-    // const newMessage = {username: this.state.currentUser.name, content: newIncomingMessage};
-    // // why use concat
-    // // does not change the current state until 'setState' is called
-    // const updatedMessages = this.state.messages.concat(newMessage);
-    // this.setState({messages: updatedMessages});
-    if (newMessageContent) {
-      const postMessage = {
-        type: 'postMessage',
-        username: this.state.currentUser.name || 'Anonymous',
-        content: newMessageContent,
-        color: this.state.color
-      };
-      console.log(`(client -> server) : ${JSON.stringify(postMessage)}`);
-      this.socket.send(JSON.stringify(postMessage));
-    }
+    const postMessage = {
+      type: 'postMessage',
+      username: this.state.currentUser.name,
+      content: newMessageContent,
+      color: this.state.color
+    };
+    console.log(`(client -> server) : ${JSON.stringify(postMessage)}`);
+    this.socket.send(JSON.stringify(postMessage));
+  }
+
+  addImage = (newImageUrl) => {
+    // const postImage = {
+    //   type: 'postImage',
+    //   username: this.state.currentUser.name,
+    //   url: newImageUrl
+    // }
+    // console.log(`(client -> server) : ${JSON.stringify(postImage)}`);
+    // this.socket.send(JSON.stringify(postImage));
   }
 
   changeName = (newName) => {
-    // const prevName = this.state.currentUser.name || 'Anonymous';
-    // this.setState({currentUser: {name: newName}});
-    // const postNotification = {
-    //   type: 'postNotification',
-    //   content: `${prevName} changed their name to ${newName}`
-    // }
-    // console.log(`(client -> server) : ${JSON.stringify(postNotification)}`);
-    // this.socket.send(JSON.stringify(postNotification));
-
     const newNameTrim = newName.replace(/^\s+|\s+$/g,'') || 'Anonymous';
-    const prevName = this.state.currentUser.name || 'Anonymous';
+    const prevName = this.state.currentUser.name;
     if (prevName != newNameTrim) {
-      this.setState({currentUser: {name: newName}});
+      this.setState({currentUser: {name: newNameTrim}});
       const postNotification = {
         type: 'postNotification',
-        content: `${prevName} changed their name to ${newNameTrim}`
+        notification: `${prevName} changed their name to ${newNameTrim}`
       }
       console.log(`(client -> server) : ${JSON.stringify(postNotification)}`);
       this.socket.send(JSON.stringify(postNotification));
@@ -103,6 +103,7 @@ class App extends Component {
         <ChatBar
           currentUser={this.state.currentUser}
           addMessage={this.addMessage}
+          addImage={this.addImage}
           changeName={this.changeName}
         />
       </div>
